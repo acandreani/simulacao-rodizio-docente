@@ -1,0 +1,10 @@
+{
+  "cenarios": 21,
+  "equipes_sensibilidade": 100,
+  "execucoes": 121,
+  "anos": 20,
+  "dados": "inteiramente sinteticos",
+  "politica": "fila_assegurada",
+  "semente_cenarios": 1,
+  "semente_sensibilidade": "20261001 + n * 1000 + rep"
+}
