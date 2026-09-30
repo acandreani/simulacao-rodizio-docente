@@ -6,7 +6,7 @@ O objetivo é permitir a reprodução e a inspeção dos resultados exploratóri
 
 ## Executar
 
-Requer Python 3.11 ou posterior. Utiliza somente a biblioteca padrão, sem instalações adicionais.
+Requer Python 3.11 ou posterior. O simulador e os testes utilizam somente a biblioteca padrão, sem instalações adicionais. Os gráficos já estão incluídos no repositório.
 
 ```bash
 git clone https://github.com/acandreani/simulacao-rodizio-docente.git
@@ -22,6 +22,15 @@ python3 simular.py --saida resultados_novos
 ```
 
 Não execute os testes com a opção `-O`, que desativa as verificações internas feitas com `assert`.
+
+Para regenerar os três gráficos e a tabela de disponibilidade do README, instale a dependência opcional e execute:
+
+```bash
+python3 -m pip install -r requirements-graficos.txt
+python3 gerar_graficos.py
+```
+
+O gerador lê `resultados/`, salva as imagens em `docs/graficos/` e atualiza somente a seção delimitada de resultados visuais. Execute `python3 simular.py` antes se desejar renovar também os resultados numéricos.
 
 ## Regra representada
 
@@ -56,6 +65,37 @@ Nos cenários de crescimento, A começa com 100 pontos e B com 68; os ingressant
 
 Nas cem equipes de disponibilidade variável, todos os participantes receberam ao menos uma atribuição; a maior sequência observada foi de seis atribuições à mesma pessoa. Esses resultados não garantem alternância em toda oferta nem atendimento em prazo fixo.
 
+<!-- inicio: resultados visuais gerados -->
+### Resultados visuais
+
+Os gráficos abaixo usam exclusivamente os arquivos de resultados deste repositório. Todos os participantes são fictícios.
+
+**Equipes estáveis.** Sem entradas, saídas ou indisponibilidade, a diferença de atribuições entre docentes fica em, no máximo, uma oferta nos dois cenários apresentados. A pontuação inicial não impede a alternância depois da formação da fila.
+
+![Dois gráficos de barras: cinco docentes recebem oito atribuições cada; doze docentes recebem três ou quatro atribuições cada.](docs/graficos/equipes_estaveis.png)
+
+**Crescimento contínuo.** As barras contam pessoas distintas, e não ofertas. A equipe começa com dois docentes e recebe novos inscritos por 39 semestres. O número de participantes cresce mais depressa que o de vagas. Quem ainda não recebeu uma atribuição ao fim de vinte anos não está necessariamente excluído para sempre; o horizonte observado terminou.
+
+![Atendimento em crescimento contínuo: entre 41 participantes, 21 recebem atribuição e vinte não; entre oitenta, 27 recebem e 53 não.](docs/graficos/crescimento_continuo.png)
+
+**Disponibilidade variável.** Cada ponto representa uma das cem execuções, com vinte equipes de cada tamanho. A linha laranja marca a mediana. A maior sequência é calculada separadamente em cada execução: ela não representa a quantidade total de atribuições de um docente. A indisponibilidade dos demais pode permitir repetições.
+
+![Distribuição da maior sequência de atribuições à mesma pessoa, por tamanho de equipe. Valores exatos e número de execuções estão na tabela abaixo.](docs/graficos/disponibilidade_variavel.png)
+
+| Docentes por equipe | Execuções | Ofertas preenchidas (mín.–máx., de 40) | Maior sequência observada | Execuções em que todos receberam atribuição |
+| ---: | ---: | ---: | ---: | ---: |
+| 2 | 20 | 32–40 | 6 | 20 |
+| 3 | 20 | 38–40 | 5 | 20 |
+| 5 | 20 | 40–40 | 4 | 20 |
+| 9 | 20 | 40–40 | 1 | 20 |
+| 12 | 20 | 40–40 | 1 | 20 |
+
+Cada execução tem quarenta ofertas. Uma oferta fica sem preenchimento quando ninguém pode assumir. Fora dos afastamentos, a probabilidade de disponibilidade é de 80% por docente e oferta. Todos os participantes dessas cem equipes estiveram disponíveis em alguma oferta; por isso, o indicador de ausência de atribuição permite a contagem da última coluna neste conjunto. Esses resultados são exploratórios e não garantem atendimento em outras condições.
+
+Fontes: [cenários e sequências](resultados/resultados.json) e [cem equipes de disponibilidade variável](resultados/sensibilidade.csv).
+
+<!-- fim: resultados visuais gerados -->
+
 ## Arquivos e métricas
 
 | Arquivo | Conteúdo |
@@ -65,6 +105,8 @@ Nas cem equipes de disponibilidade variável, todos os participantes receberam a
 | `fila.py` | Motor de distribuição e registros de indisponibilidade |
 | `simular.py` | Execução e exportação dos resultados |
 | `test_fila.py` | Casos analíticos, precedência, conservação e reprodução |
+| `gerar_graficos.py` | Gráficos e tabela gerados a partir dos resultados |
+| `docs/graficos/` | Imagens exibidas neste README |
 | `resultados/resultados.json` | Contagens, sequências e eventos dos 21 cenários |
 | `resultados/memoria_fila.csv` | Pontuação e seleção por participante disponível e oferta |
 | `resultados/sensibilidade.csv` | Indicadores das cem equipes sorteadas |
